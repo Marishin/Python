@@ -1,0 +1,20 @@
+import re
+import requests
+import sys
+
+url1 = sys.stdin.readline()
+url2 = sys.stdin.readline()
+
+res1 = requests.get(url1.rstrip())
+if res1.status_code != 200:
+    print("No")
+    sys.exit()
+for i in re.findall(r'href="(.+)"', res1.text):
+    res2 = requests.get(i)
+    if res2.status_code != 200:
+        continue
+    for j in re.findall(r'href="(.+)"', res2.text):
+        if j == url2.rstrip():
+            print("Yes")
+            sys.exit()
+print("No")
